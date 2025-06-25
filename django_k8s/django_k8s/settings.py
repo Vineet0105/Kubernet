@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/4.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
-
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-qe($ysmc0vv8&%fr)hneq@8pyhm^^9!3@uwm3kxb9jfyk$uza4'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = str(os.environ.get('DEBUG'))=='1'
 
 ALLOWED_HOSTS = []
 
@@ -79,6 +79,28 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+
+
+PG_DB = str(os.environ.get('POSTGRES_DB'))
+PG_PASSWORD = str(os.environ.get('POSTGRES_PASSWORD'))
+PG_USER = str(os.environ.get('POSTGRES_USER'))
+PG_HOST = str(os.environ.get('POSTGRES_HOST'))
+PG_PORT = str(os.environ.get('POSTGRES_PORT'))
+PG_ACTIVE = str(os.environ.get('POSTGRES_ACTIVE'))=='1'
+
+if PG_ACTIVE:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql_psycopg2",
+            "NAME": PG_DB,
+            "USER": PG_USER,
+            "PASSWORD": PG_PASSWORD,
+            "HOST": PG_HOST,
+            "PORT": PG_PORT
+        }
+    }
+
 
 
 # Password validation
